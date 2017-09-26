@@ -32,16 +32,22 @@ class Draw {
     public scaleX;
     public scaleY;
     public d3line;
-    constructor(element: string, customData?: styles) {
+    public chartType;
+    constructor(element: string, chartType: string, customData?: styles) {
         this.element = element;
         this.defaultStyles = defaultStyles;
         this.customData = customData;
         this.innerWidth = this.defaultStyles.width - this.defaultStyles.margin.left - this.defaultStyles.margin.right;
         this.innerHeight = this.defaultStyles.height - this.defaultStyles.margin.top - this.defaultStyles.margin.bottom;
+        this.chartType = chartType;
         this.chart();
-        // this.lineChart();
-        // this.columnChart();
-        this.barChart();
+        if (this.chartType == "line") {
+            this.lineChart();
+        } else if (this.chartType == "column") {
+            this.columnChart();
+        } else if (this.chartType == "bar") {
+            this.barChart();
+        }        
     }
 
     chart() {
@@ -139,10 +145,15 @@ class Draw {
     }
 
     render(data) {
-        this.data = data;        
-        //this.drawLine(this.data);
-        // this.drawColumn(this.data);
-        this.drawBar(this.data);
+        this.data = data; 
+        if (this.chartType == "line") {
+            this.drawLine(this.data);
+        } else if (this.chartType == "column") {
+            this.drawColumn(this.data);
+        } else if (this.chartType == "bar") {
+            this.drawBar(this.data);
+        }
+        
         if (this.defaultStyles.axis) {
             this.drawAxis(this.data);
         }
