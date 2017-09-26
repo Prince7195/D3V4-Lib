@@ -40,7 +40,7 @@ class Draw {
         this.innerHeight = this.defaultStyles.height - this.defaultStyles.margin.top - this.defaultStyles.margin.bottom;
         this.chart();
         // this.lineChart();
-        this.barChart();
+        this.columnChart();
     }
 
     chart() {
@@ -64,7 +64,7 @@ class Draw {
             .y(function (d) { return scaleY(d["value"]) });
     }
 
-    barChart() {
+    columnChart() {
        this.scaleY = d3.scaleLinear()
             .range([this.innerHeight, 0]);
 
@@ -94,7 +94,7 @@ class Draw {
             .attr('d', this.d3line);
     }
 
-    drawBar(dataCol) {
+    drawColumn(dataCol) {
          this.scaleX.domain(dataCol.map((data) => { return data["date"] }));
          this.scaleY.domain([0, d3.max(dataCol, (data) => { return data["value"] })]);
          d3.select('svg')
@@ -116,7 +116,7 @@ class Draw {
     render(data) {
         this.data = data;        
         //this.drawLine(this.data);
-        this.drawBar(this.data);
+        this.drawColumn(this.data);
         if (this.defaultStyles.axis) {
             this.drawAxis(this.data);
         }
