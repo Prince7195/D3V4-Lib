@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>TypeScript HTML App</title>
+    <link rel="stylesheet" href="app.css" type="text/css" />
+    <script src="scripts/d3.v4.min.js"></script>
+</head>
+
+<body>
+    <div id="chart"></div>
+    <script src="app.js"></script>
+    <script>
+        var dataArr = [];
+        d3.tsv('./data/data10.tsv', function(err, allData) {
+            if (err) throw err;
+            allData.forEach(function(data) {
+                //data["date"] = d3.timeParse("%d-%b-%y")(data["date"]);
+                data["date"] = data["date"];
+                data["value"] = +data["value"];
+                dataArr.push(data);
+            });
+            var lineChart = new Draw('#chart');
+            lineChart.render(allData);
+        });
+    </script>
+</body>
+
+</html>

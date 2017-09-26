@@ -1,0 +1,17 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+span {
+    font-style: italic;
+}
+
+.chart-line {
+    fill: none;
+    stroke: yellowgreen;
+    stroke-width: 2px;
+}
+
+.chart-bar {
+    fill: yellowgreen;
+}
