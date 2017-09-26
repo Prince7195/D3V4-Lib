@@ -6,7 +6,7 @@ const defaultStyles = {
         top: 20,
         right: 20,
         bottom: 30,
-        left: 50
+        left: 75
     },
     axis: true,
     axisPadding: 2,
@@ -40,6 +40,7 @@ class Draw {
         this.innerHeight = this.defaultStyles.height - this.defaultStyles.margin.top - this.defaultStyles.margin.bottom;
         this.chart();
         // this.lineChart();
+        // this.columnChart();
         this.barChart();
     }
 
@@ -65,11 +66,19 @@ class Draw {
     }
 
     barChart() {
-       this.scaleY = d3.scaleLinear()
-            .range([this.innerHeight, 0]);
+        this.scaleX = d3.scaleLinear()
+            .range([0, this.innerWidth]);
 
-       this.scaleX = d3.scaleBand()
+        this.scaleY = d3.scaleBand()
+            .range([this.innerHeight, 0]).padding(0.1);        
+    }
+
+    columnChart() {
+        this.scaleX = d3.scaleBand()
             .range([0, this.innerWidth]).padding(0.1);
+
+       this.scaleY = d3.scaleLinear()
+            .range([this.innerHeight, 0]);       
     }
 
     drawAxis(data) {
@@ -95,12 +104,28 @@ class Draw {
     }
 
     drawBar(dataCol) {
+        this.scaleX.domain([0, d3.max(dataCol, (data) => { return data["value"] })]);
+        this.scaleY.domain(dataCol.map((data) => { return data["date"] }));
+        d3.select('svg').select('g').selectAll('.chart-bar')
+            .data(dataCol).enter().append('rect')
+            .attr('class', 'chart-bar')
+            .attr('x', 0)
+            .attr('height', this.scaleY.bandwidth())
+            .attr('y', (data) => {
+                return this.scaleY(data["date"]);
+            })
+            .attr('width', (data) => {
+                return this.scaleX(data["value"]);
+            });
+    }
+
+    drawColumn(dataCol) {
          this.scaleX.domain(dataCol.map((data) => { return data["date"] }));
          this.scaleY.domain([0, d3.max(dataCol, (data) => { return data["value"] })]);
          d3.select('svg')
-             .select('g').selectAll('.chart-bar')
+             .select('g').selectAll('.chart-column')
              .data(dataCol).enter().append('rect')
-             .attr('class', 'chart-bar')
+             .attr('class', 'chart-column')
             .attr('x', (data) => {
                 return this.scaleX(data["date"]);
             })
@@ -116,6 +141,7 @@ class Draw {
     render(data) {
         this.data = data;        
         //this.drawLine(this.data);
+        // this.drawColumn(this.data);
         this.drawBar(this.data);
         if (this.defaultStyles.axis) {
             this.drawAxis(this.data);
