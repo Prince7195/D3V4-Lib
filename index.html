@@ -1,31 +1,49 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <title>TypeScript HTML App</title>
-    <link rel="stylesheet" href="app.css" type="text/css" />
+    <link rel="stylesheet" href="app.css" type="text/css" />  
     <script src="scripts/d3.v4.min.js"></script>
 </head>
-
 <body>
+    <button type="button" id="btnBar" >Bar</button>&nbsp;
+    <button type="button" id="btnColumn">Column</button>&nbsp;
+    <button type="button" id="btnLine">Line</button>&nbsp;
+    <button type="button" id="btnArea">Area</button><br/>
     <div id="chart"></div>
     <script src="app.js"></script>
-    <script>
-        var dataArr = [];
-        d3.tsv('./data/data10.tsv', function(err, allData) {
-            if (err) throw err;
-            allData.forEach(function(data) {
-                //data["date"] = d3.timeParse("%d-%b-%y")(data["date"]);
-                data["date"] = data["date"];
-                data["value"] = +data["value"];
-                dataArr.push(data);
-            });
-            var lineChart = new Draw('#chart', 'bar');
-            lineChart.render(allData);
+    <script> 
+        var buttonBar = document.getElementById('btnBar').addEventListener('click', function () {
+            document.getElementById('chart').innerHTML = "";
+            drawChart('bar');
         });
+        var buttonColumn = document.getElementById('btnColumn').addEventListener('click', function () {
+            document.getElementById('chart').innerHTML = "";
+            drawChart('column');
+        });
+        var buttonLine = document.getElementById('btnLine').addEventListener('click', function () {
+            document.getElementById('chart').innerHTML = "";
+            drawChart('line');
+        });
+        var buttonArea = document.getElementById('btnArea').addEventListener('click', function () {
+            document.getElementById('chart').innerHTML = "";
+            drawChart('area');
+        });
+
+        function drawChart(chartType) {
+            d3.tsv('./data/data10.tsv', function (err, allData) {
+                if (err) throw err;
+                allData.forEach(function (data) {
+                    data["date"] = d3.timeParse("%d-%b-%y")(data["date"]);
+                    //data["date"] = data["date"];
+                    data["value"] = +data["value"];
+                });
+                var lineChart = new Draw('#chart', chartType);
+                lineChart.render(allData);
+            });
+        }
     </script>
 </body>
-
 </html>
